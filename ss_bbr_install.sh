@@ -34,6 +34,7 @@ chmod +x /etc/rc.d/rc.local
 # 安装Google BBR 加速
 wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
 chmod +x bbr.sh
+sed -i '/char=`get_char`/d' bbr.sh
 echo "Y" | ./bbr.sh
 
 
