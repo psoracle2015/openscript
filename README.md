@@ -1,0 +1,2 @@
+# openscript
+open script
