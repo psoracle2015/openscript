@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-password="$1"
+# wget --no-check-certificate -O ss_bbr_install.sh https://raw.githubusercontent.com/psoracle2015/openscript/master/ss_bbr_install.sh && bash ss_bbr_install.sh MzU4MmQ4N2E5MjIx
+
+password="${1:-MzU4MmQ4N2E5MjIx}"
 
 # 禁止iptables
 systemctl stop firewalld 2>&1
@@ -13,8 +15,7 @@ easy_install pip
 pip install shadowsocks
 
 # 生成shadowsocks配置文件
-$(
-cat << EOF
+cat > /etc/shadowsocks.json << EOF
 {
     "server": "0.0.0.0",
     "method": "aes-256-cfb",
@@ -25,7 +26,6 @@ cat << EOF
     }
 }
 EOF
-) > /etc/shadowsocks.json
 
 # 添加开机自动启动
 echo '/bin/python /bin/ssserver -c /etc/shadowsocks.json -d start' >> /etc/rc.d/rc.local
