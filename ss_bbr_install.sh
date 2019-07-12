@@ -5,16 +5,18 @@
 password="${1:-MzU4MmQ4N2E5MjIx}"
 
 # 禁止iptables
+echo "正在禁用防火墙"
 systemctl stop firewalld 2>&1
 systemctl disable firewalld 2>&1
 
 # 安装shadowsocks
-rm -f /var/lib/rpm/__*
-rpm --rebuilddb -v -v
+echo "正在处理yum缓存"
 yum clean all
 yum makecache
-yum -y install vim wget m2crypto python-setuptools
+echo "正在安装一些工具"
+yum -y install vim wget m2crypto python-setuptools lsof iptraf-ng
 easy_install pip
+echo "正在安装shadowsocks"
 pip install shadowsocks
 
 # 生成shadowsocks配置文件
@@ -31,10 +33,14 @@ cat > /etc/shadowsocks.json << EOF
 EOF
 
 # 添加开机自动启动
-echo '/bin/python /bin/ssserver -c /etc/shadowsocks.json -d start' >> /etc/rc.d/rc.local
-chmod +x /etc/rc.d/rc.local
+grep -q '/bin/ssserver -c /etc/shadowsocks.json -d start' /etc/rc.d/rc.loca
+if [[ $? -ne 0 ]]; then
+    echo '/bin/python /bin/ssserver -c /etc/shadowsocks.json -d start' >> /etc/rc.d/rc.local
+    chmod +x /etc/rc.d/rc.local
+fi
 
 # 安装Google BBR 加速
+echo "正在安装bbr"
 wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
 chmod +x bbr.sh
 sed -i '/char=`get_char`/d' bbr.sh
