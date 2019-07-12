@@ -35,7 +35,7 @@ echo '/bin/python /bin/ssserver -c /etc/shadowsocks.json -d start' >> /etc/rc.d/
 chmod +x /etc/rc.d/rc.local
 
 # 安装Google BBR 加速
-wget -s --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
+wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
 chmod +x bbr.sh
 sed -i '/char=`get_char`/d' bbr.sh
 echo "Y" | ./bbr.sh
