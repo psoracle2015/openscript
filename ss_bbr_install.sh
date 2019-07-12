@@ -9,6 +9,9 @@ systemctl stop firewalld 2>&1
 systemctl disable firewalld 2>&1
 
 # 安装shadowsocks
+rm -f /var/lib/rpm/__*
+rpm --rebuilddb -v -v
+yum clean all
 yum makecache
 yum -y install vim wget m2crypto python-setuptools
 easy_install pip
@@ -32,7 +35,7 @@ echo '/bin/python /bin/ssserver -c /etc/shadowsocks.json -d start' >> /etc/rc.d/
 chmod +x /etc/rc.d/rc.local
 
 # 安装Google BBR 加速
-wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
+wget -s --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
 chmod +x bbr.sh
 sed -i '/char=`get_char`/d' bbr.sh
 echo "Y" | ./bbr.sh
